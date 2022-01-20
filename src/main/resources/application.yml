@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3309/marketplace?useSSL=false
+    url: jdbc:mysql://localhost:3308/marketplace?useSSL=false
     username: root
     password: admin
 
