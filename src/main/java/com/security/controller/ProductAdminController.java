@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/rest/product")
-public class ProductController {
+@RequestMapping("/admin/product")
+public class ProductAdminController {
     
     @Autowired
     private ProductService productService;
@@ -20,4 +20,5 @@ public class ProductController {
         Product product = productService.findById(id);
         return ResponseEntity.ok(product);
     }
+    
 }
