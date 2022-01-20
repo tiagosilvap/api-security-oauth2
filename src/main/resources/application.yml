@@ -2,6 +2,10 @@
 server:
   port: 8081
 
+app:
+  client_id: admin
+  secret_id: 12345
+
 spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver

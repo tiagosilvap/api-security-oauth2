@@ -3,7 +3,7 @@ package com.security.config;
 import com.security.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.security.oauth2.authserver.OAuth2AuthorizationServerConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -24,8 +24,12 @@ import static com.security.config.ResourceServerConfiguration.RESOURCE_ID;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
     
-    private static final String SECRET_ID = "12345";
-    private static final String CLIENT_ID = "admin";
+    @Value("${app.client_id}")
+    private String clientId;
+    
+    @Value("${app.secret_id}")
+    private String secretId;
+    
     
     @Qualifier("authenticationManagerBean")
     final AuthenticationManager authenticationManager;
@@ -44,10 +48,10 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient(CLIENT_ID)
+                .withClient(clientId)
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("read", "write")
-                .secret(encoder().encode(SECRET_ID))
+                .secret(encoder().encode(secretId))
                 .resourceIds(RESOURCE_ID);
     }
     
