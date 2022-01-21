@@ -3,8 +3,8 @@ server:
   port: 8081
 
 app:
-  client_id: admin
-  secret_id: 12345
+  client_id: 3dd0e341-d18b-42d8-b981-a701dc3f62c1
+  secret_id: 692611d1-6a0c-4f08-9099-6b0496dd9400
   signing_key_jwt: api-security-oauth2
 
 spring:
