@@ -5,6 +5,7 @@ server:
 app:
   client_id: admin
   secret_id: 12345
+  signing_key_jwt: api-security-oauth2
 
 spring:
   datasource:
