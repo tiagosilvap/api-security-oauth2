@@ -26,7 +26,6 @@ public class ProductAdminController {
     
     @RequestMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
-        System.out.println(getLoggedUser());
         Product product = productService.findById(id);
         return ResponseEntity.ok(product);
     }
