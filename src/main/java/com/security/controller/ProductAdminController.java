@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/admin/product")
+@RequestMapping("/admin")
 public class ProductAdminController {
     
     private final ProductService productService;
     private final IAuthenticationFacade authenticationFacade;
     
-    @RequestMapping("/{id}")
+    @RequestMapping("/product/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         Product product = productService.findById(id);
         return ResponseEntity.ok(product);
