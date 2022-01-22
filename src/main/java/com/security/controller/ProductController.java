@@ -1,15 +1,12 @@
 package com.security.controller;
 
 import com.security.entity.Product;
-import com.security.entity.enums.Role;
 import com.security.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequestMapping("/product")
@@ -19,7 +16,6 @@ public class ProductController {
     private ProductService productService;
     
     @RequestMapping("/{id}")
-    @RolesAllowed(Role.ADMIN)
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         Product product = productService.findById(id);
         return ResponseEntity.ok(product);
