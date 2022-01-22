@@ -1,6 +1,6 @@
 package com.security.service;
 
-import com.security.model.Product;
+import com.security.entity.Product;
 import com.security.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

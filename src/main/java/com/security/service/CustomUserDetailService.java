@@ -1,6 +1,6 @@
 package com.security.service;
 
-import com.security.model.Usuario;
+import com.security.entity.Usuario;
 import com.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;

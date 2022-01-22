@@ -1,4 +1,4 @@
-package com.security.model;
+package com.security.entity;
 
 import lombok.Getter;
 

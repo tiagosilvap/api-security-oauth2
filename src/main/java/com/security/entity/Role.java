@@ -1,4 +1,4 @@
-package com.security.model;
+package com.security.entity;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Set;
 
 @Data
 @Entity

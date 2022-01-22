@@ -1,7 +1,7 @@
 package com.security.controller;
 
 import com.security.components.IAuthenticationFacade;
-import com.security.model.Product;
+import com.security.entity.Product;
 import com.security.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
