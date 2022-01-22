@@ -53,12 +53,9 @@ public class AuthorizationServerConfigurationJWT extends AuthorizationServerConf
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("read", "write")
                 .secret(encoder().encode(secretId))
+                .accessTokenValiditySeconds(600)
+                .refreshTokenValiditySeconds(900)
                 .resourceIds(RESOURCE_ID);
-    }
-    
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
     }
     
     @Bean
@@ -86,5 +83,10 @@ public class AuthorizationServerConfigurationJWT extends AuthorizationServerConf
         jatc.setAccessTokenConverter(datc);
         jatc.setSigningKey(signingKey);
         return jatc;
+    }
+    
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
     }
 }
