@@ -1,12 +1,11 @@
 package com.security.controller;
 
-import com.security.components.IAuthenticationFacade;
+import com.security.components.AuthenticationFacade;
 import com.security.entity.Product;
 import com.security.entity.Usuario;
 import com.security.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductAdminController {
     
     private final ProductService productService;
-    private final IAuthenticationFacade authenticationFacade;
+    private final AuthenticationFacade authenticationFacade;
     
     @RequestMapping("/product/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {

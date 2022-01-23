@@ -1,4 +1,4 @@
-package com.security.service;
+package com.security.service.impl;
 
 import com.security.entity.Usuario;
 import com.security.repository.UserRepository;
