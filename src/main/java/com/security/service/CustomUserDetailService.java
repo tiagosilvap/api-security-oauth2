@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
     
+    private static final String INVALID_USER = "Invalid user";
+    
     private final UserRepository userRepository;
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario user = userRepository.findByName(username);
-        return new User(user.getName(), user.getPassword(), user.getRoles());
+        return userRepository.findByName(username)
+                .orElseThrow(() -> new UsernameNotFoundException(INVALID_USER));
     }
 }
