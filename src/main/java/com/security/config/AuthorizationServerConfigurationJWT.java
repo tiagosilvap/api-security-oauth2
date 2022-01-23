@@ -50,9 +50,9 @@ public class AuthorizationServerConfigurationJWT extends AuthorizationServerConf
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient(clientId)
+                .secret(encoder().encode(secretId))
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("read", "write")
-                .secret(encoder().encode(secretId))
                 .accessTokenValiditySeconds(600)
                 .refreshTokenValiditySeconds(900)
                 .resourceIds(RESOURCE_ID);
