@@ -2,6 +2,7 @@ package com.security.controller;
 
 import com.security.components.IAuthenticationFacade;
 import com.security.entity.Product;
+import com.security.entity.Usuario;
 import com.security.entity.enums.AttendancePermissions;
 import com.security.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +24,13 @@ public class ProductController {
     private final IAuthenticationFacade authenticationFacade;
     
     @RequestMapping("/{id}")
-    @RolesAllowed(AttendancePermissions.VIEW_PRODUCT)
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
-        System.err.println(getLoggedUser());
+        System.out.println(getLoggedUser());
         Product product = productService.findById(id);
         return ResponseEntity.ok(product);
     }
     
-    private UserDetails getLoggedUser() {
-        return (UserDetails) authenticationFacade.getAuthentication().getPrincipal();
+    private Usuario getLoggedUser() {
+        return (Usuario) authenticationFacade.getAuthentication().getPrincipal();
     }
 }

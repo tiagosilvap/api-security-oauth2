@@ -2,6 +2,7 @@ package com.security.controller;
 
 import com.security.components.IAuthenticationFacade;
 import com.security.entity.Product;
+import com.security.entity.Usuario;
 import com.security.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +21,13 @@ public class ProductAdminController {
     
     @RequestMapping("/product/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
+        System.out.println(getLoggedUser());
         Product product = productService.findById(id);
         return ResponseEntity.ok(product);
     }
     
-    private UserDetails getLoggedUser() {
-        return (UserDetails) authenticationFacade.getAuthentication().getPrincipal();
+    private Usuario getLoggedUser() {
+        return (Usuario) authenticationFacade.getAuthentication().getPrincipal();
     }
     
 }
