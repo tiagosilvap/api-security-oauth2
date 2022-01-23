@@ -23,7 +23,7 @@ import static com.security.config.ResourceServerConfiguration.RESOURCE_ID;
 @Configuration
 @RequiredArgsConstructor
 @EnableAuthorizationServer
-public class AuthorizationServerConfigurationJWT extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
     
     @Value("${app.client_id}")
     private String clientId;
