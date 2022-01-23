@@ -33,11 +33,11 @@ public class Usuario implements UserDetails {
     @JoinTable(name = "user_role", joinColumns = {
             @JoinColumn(name = "users", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "roles", referencedColumnName = "id")})
-    private Set<Role> roles;
+    private Set<Authority> authorities;
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return authorities;
     }
     
     @Override

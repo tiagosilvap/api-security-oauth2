@@ -12,7 +12,9 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "role")
-public class Role implements GrantedAuthority {
+public class Authority implements GrantedAuthority {
+    
+    private static final String ROLE = "ROLE_";
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +24,6 @@ public class Role implements GrantedAuthority {
     
     @Override
     public String getAuthority() {
-        return name;
+        return ROLE.concat(name);
     }
 }

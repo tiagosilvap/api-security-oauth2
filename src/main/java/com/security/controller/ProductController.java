@@ -24,6 +24,7 @@ public class ProductController {
     private final IAuthenticationFacade authenticationFacade;
     
     @RequestMapping("/{id}")
+    @RolesAllowed(AttendancePermissions.VIEW_PRODUCT)
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         System.out.println(getLoggedUser());
         Product product = productService.findById(id);
