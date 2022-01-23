@@ -25,13 +25,13 @@ import static com.security.config.ResourceServerConfiguration.RESOURCE_ID;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
     
-    @Value("${app.client_id}")
+    @Value("${security.oauth2.client.client_id}")
     private String clientId;
     
-    @Value("${app.secret_id}")
+    @Value("${security.oauth2.client.secret_id}")
     private String secretId;
     
-    @Value("${app.signing_key_jwt}")
+    @Value("${security.jwt.signing_key}")
     private String signingKey;
     
     private final AuthenticationManager authenticationManager;
