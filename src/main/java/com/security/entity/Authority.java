@@ -14,8 +14,6 @@ import javax.persistence.Table;
 @Table(name = "role")
 public class Authority implements GrantedAuthority {
     
-    private static final String ROLE = "ROLE_";
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,6 +22,6 @@ public class Authority implements GrantedAuthority {
     
     @Override
     public String getAuthority() {
-        return ROLE.concat(name);
+        return name;
     }
 }
