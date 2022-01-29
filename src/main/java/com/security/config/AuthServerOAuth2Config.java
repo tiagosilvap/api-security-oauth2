@@ -1,10 +1,15 @@
 package com.security.config;
 
-import com.security.service.impl.CustomUserDetailService;
+import com.security.service.CustomUserDetailService;
+import com.security.service.OAuthClientDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -15,53 +20,62 @@ import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConv
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import static com.security.config.ResourceServerConfiguration.RESOURCE_ID;
+import javax.sql.DataSource;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
-    
-    @Value("${security.oauth2.client.client_id}")
-    private String clientId;
-    
-    @Value("${security.oauth2.client.secret_id}")
-    private String secretId;
+@RequiredArgsConstructor
+public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
     
     @Value("${security.jwt.signing_key}")
     private String signingKey;
     
+    @Value("classpath:schema.sql")
+    private Resource schemaScript;
+    
     private final AuthenticationManager authenticationManager;
+    
+    private final DataSource dataSource;
     
     private final CustomUserDetailService userDetailService;
     
+    private final OAuthClientDetailService clientDetailService;
+    
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore())
+    public void configure(AuthorizationServerEndpointsConfigurer endpointsConfigurer) throws Exception {
+        endpointsConfigurer
                 .authenticationManager(authenticationManager)
+                .tokenStore(tokenStore())
                 .accessTokenConverter(accessTokenConverter())
                 .tokenEnhancer(accessTokenConverter());
     }
     
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient(clientId)
-                .secret(encoder().encode(secretId))
-                .authorizedGrantTypes("password", "refresh_token")
-                .scopes("read", "write")
-                .accessTokenValiditySeconds(600)
-                .refreshTokenValiditySeconds(900)
-                .resourceIds(RESOURCE_ID);
-//                .redirectUris("http://localhost:8081/login");
+        clients.jdbc(dataSource);
+    }
+    
+    @Bean
+    public DataSourceInitializer dataSoubrceInitializer(DataSource dataSource) {
+        DataSourceInitializer initializer = new DataSourceInitializer();
+        initializer.setDataSource(dataSource);
+        initializer.setDatabasePopulator(databasePopulator());
+        return initializer;
+    }
+    
+    private DatabasePopulator databasePopulator() {
+        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+        populator.addScript(schemaScript);
+        return populator;
     }
     
     @Bean
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
+//        tokenServices.setClientDetailsService(clientDetailService);
         tokenServices.setTokenStore(tokenStore());
         tokenServices.setSupportRefreshToken(true);
         return tokenServices;
@@ -69,7 +83,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     
     @Bean
     public TokenStore tokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
+        return new JdbcTokenStore(dataSource);
+        // return new JwtTokenStore(accessTokenConverter());
     }
     
     @Bean
@@ -90,4 +105,5 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
+    
 }
