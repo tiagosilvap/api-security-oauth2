@@ -14,13 +14,14 @@ create table oauth_client_details
     refresh_token_validity  INTEGER,
     additional_information  VARCHAR(4096),
     autoapprove             VARCHAR(255)
+    UNIQUE INDEX ix_client_id (client_id)
 );
 
 drop table if exists oauth_client_token;
 create table oauth_client_token
 (
     token_id          VARCHAR(255),
-    token             LONG VARBINARY,
+    token             MEDIUMBLOB,
     authentication_id VARCHAR(255) PRIMARY KEY,
     user_name         VARCHAR(255),
     client_id         VARCHAR(255)
@@ -30,36 +31,44 @@ drop table if exists oauth_access_token;
 create table oauth_access_token
 (
     token_id          VARCHAR(255),
-    token             LONG VARBINARY,
+    token             MEDIUMBLOB,
     authentication_id VARCHAR(255) PRIMARY KEY,
     user_name         VARCHAR(255),
     client_id         VARCHAR(255),
-    authentication    LONG VARBINARY,
-    refresh_token     VARCHAR(255)
+    authentication    MEDIUMBLOB,
+    refresh_token     VARCHAR(255),
+    create_date       DATETIME DEFAULT NOW(),
+    INDEX ix_client_id (client_id),
+    INDEX ix_create_date_access_token (create_date),
+    UNIQUE INDEX ix_token_id (token_id),
+    UNIQUE INDEX ix_refresh_token (refresh_token)
 );
 
 drop table if exists oauth_refresh_token;
 create table oauth_refresh_token
 (
     token_id       VARCHAR(255),
-    token          LONG VARBINARY,
-    authentication LONG VARBINARY
+    token          MEDIUMBLOB,
+    authentication MEDIUMBLOB,
+    create_date    DATETIME DEFAULT NOW(),
+    INDEX ix_create_date_refresh_token (create_date),
+    UNIQUE INDEX ix_refresh_token_id (token_id)
 );
 
 drop table if exists oauth_code;
 create table oauth_code
 (
-    code           VARCHAR(255),
-    authentication LONG VARBINARY
+    code           VARCHAR(256),
+    authentication MEDIUMBLOB
 );
 
 drop table if exists oauth_approvals;
 create table oauth_approvals
 (
-    userId         VARCHAR(255),
-    clientId       VARCHAR(255),
-    scope          VARCHAR(255),
+    userId         VARCHAR(256),
+    clientId       VARCHAR(256),
+    scope          VARCHAR(256),
     status         VARCHAR(10),
     expiresAt      TIMESTAMP,
-    lastModifiedAt TIMESTAMP
+    lastModifiedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
