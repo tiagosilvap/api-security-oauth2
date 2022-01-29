@@ -1,3 +1,5 @@
+SET SQL_MODE='ALLOW_INVALID_DATES';
+
 drop table if exists oauth_client_details;
 create table oauth_client_details
 (
