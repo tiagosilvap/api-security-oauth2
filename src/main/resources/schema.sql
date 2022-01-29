@@ -13,7 +13,7 @@ create table oauth_client_details
     access_token_validity   INTEGER,
     refresh_token_validity  INTEGER,
     additional_information  VARCHAR(4096),
-    autoapprove             VARCHAR(255)
+    autoapprove             VARCHAR(255),
     UNIQUE INDEX ix_client_id (client_id)
 );
 
