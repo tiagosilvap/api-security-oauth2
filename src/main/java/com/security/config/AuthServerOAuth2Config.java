@@ -1,5 +1,6 @@
 package com.security.config;
 
+import com.security.service.OAuthClientDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,8 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     
     private final AuthenticationManager authenticationManager;
     
+    private final OAuthClientDetailService clientDetailService;
+    
     private final TokenStore tokenStore;
     
     private final DataSource dataSource;
@@ -51,14 +54,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(dataSource);
-//        clients.inMemory()
-//                .withClient(clientId)
-//                .secret(encoder().encode(secretId))
-//                .authorizedGrantTypes("client_credentials", "password","refresh_token")
-//                .scopes("read", "write", "trust")
-//                .accessTokenValiditySeconds(600)
-//                .refreshTokenValiditySeconds(900)
-//                .resourceIds(RESOURCE_ID);
     }
     
     @Bean
