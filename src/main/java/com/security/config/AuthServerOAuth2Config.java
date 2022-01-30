@@ -1,5 +1,6 @@
 package com.security.config;
 
+import com.security.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,12 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
 
@@ -31,25 +37,22 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     
     private final AuthenticationManager authenticationManager;
     
-    private final TokenStore tokenStore;
-    
     private final DataSource dataSource;
+    
+    private final CustomUserDetailService userDetailService;
     
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpointsConfigurer) throws Exception {
         endpointsConfigurer
                 .authenticationManager(authenticationManager)
-                .tokenStore(tokenStore);
+                .tokenStore(tokenStore())
+                .accessTokenConverter(accessTokenConverter())
+                .tokenEnhancer(accessTokenConverter());
     }
     
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(dataSource);
-    }
-    
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
     }
     
     @Bean
@@ -64,6 +67,38 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(schemaScript);
         return populator;
+    }
+    
+    @Bean
+    public DefaultTokenServices tokenServices() {
+        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setTokenStore(tokenStore());
+        tokenServices.setSupportRefreshToken(true);
+        return tokenServices;
+    }
+    
+    @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(accessTokenConverter());
+    }
+    
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        DefaultUserAuthenticationConverter duac = new DefaultUserAuthenticationConverter();
+        duac.setUserDetailsService(userDetailService);
+        
+        DefaultAccessTokenConverter datc = new DefaultAccessTokenConverter();
+        datc.setUserTokenConverter(duac);
+        
+        JwtAccessTokenConverter jatc = new JwtAccessTokenConverter();
+        jatc.setAccessTokenConverter(datc);
+        jatc.setSigningKey(signingKey);
+        return jatc;
+    }
+    
+    @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
     }
     
 }

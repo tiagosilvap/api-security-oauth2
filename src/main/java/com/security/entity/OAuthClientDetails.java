@@ -1,6 +1,7 @@
 package com.security.entity;
 
 import com.security.converter.StringListConverter;
+import com.security.converter.StringSetConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,22 +40,22 @@ public class OAuthClientDetails implements ClientDetails {
     private String clientId;
     
     @Column(name = "resource_ids")
-    @Convert(converter = StringListConverter.class)
+    @Convert(converter = StringSetConverter.class)
     private Set<String> resourceIds = Collections.emptySet();
     
     @Column(name = "client_secret")
     private String clientSecret;
     
     @Column
-    @Convert(converter = StringListConverter.class)
+    @Convert(converter = StringSetConverter.class)
     private Set<String> scope = Collections.emptySet();
     
     @Column(name = "authorized_grant_types")
-    @Convert(converter = StringListConverter.class)
+    @Convert(converter = StringSetConverter.class)
     private Set<String> authorizedGrantTypes = Collections.emptySet();
     
     @Column(name = "web_server_redirect_uri")
-    @Convert(converter = StringListConverter.class)
+    @Convert(converter = StringSetConverter.class)
     private Set<String> registeredRedirectUris;
     
     @Column
@@ -68,7 +69,7 @@ public class OAuthClientDetails implements ClientDetails {
     private Integer refreshTokenValiditySeconds;
     
     @Column(name = "autoapprove")
-    @Convert(converter = StringListConverter.class)
+    @Convert(converter = StringSetConverter.class)
     private Set<String> autoApproveScopes;
     
     @Column(name = "additional_information")
