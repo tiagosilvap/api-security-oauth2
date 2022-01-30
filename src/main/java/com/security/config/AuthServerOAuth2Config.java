@@ -1,6 +1,5 @@
 package com.security.config;
 
-import com.security.service.OAuthClientDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,12 +23,6 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
     
-    @Value("${security.oauth2.client.client_id}")
-    private String clientId;
-    
-    @Value("${security.oauth2.client.secret_id}")
-    private String secretId;
-    
     @Value("${security.jwt.signing_key}")
     private String signingKey;
     
@@ -37,8 +30,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     private Resource schemaScript;
     
     private final AuthenticationManager authenticationManager;
-    
-    private final OAuthClientDetailService clientDetailService;
     
     private final TokenStore tokenStore;
     
@@ -57,6 +48,11 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     }
     
     @Bean
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
     public DataSourceInitializer dataSoubrceInitializer(DataSource dataSource) {
         DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
@@ -70,8 +66,4 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         return populator;
     }
     
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

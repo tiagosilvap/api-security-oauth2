@@ -1,4 +1,5 @@
-SET SQL_MODE='ALLOW_INVALID_DATES';
+SET
+SQL_MODE='ALLOW_INVALID_DATES';
 
 drop table if exists oauth_client_details;
 create table oauth_client_details
@@ -38,8 +39,8 @@ create table oauth_access_token
     authentication    MEDIUMBLOB,
     refresh_token     VARCHAR(255),
     create_date       DATETIME DEFAULT NOW(),
-    INDEX ix_client_id (client_id),
-    INDEX ix_create_date_access_token (create_date),
+    INDEX             ix_client_id (client_id),
+    INDEX             ix_create_date_access_token (create_date),
     UNIQUE INDEX ix_token_id (token_id),
     UNIQUE INDEX ix_refresh_token (refresh_token)
 );
@@ -51,7 +52,7 @@ create table oauth_refresh_token
     token          MEDIUMBLOB,
     authentication MEDIUMBLOB,
     create_date    DATETIME DEFAULT NOW(),
-    INDEX ix_create_date_refresh_token (create_date),
+    INDEX          ix_create_date_refresh_token (create_date),
     UNIQUE INDEX ix_refresh_token_id (token_id)
 );
 
@@ -72,3 +73,26 @@ create table oauth_approvals
     expiresAt      TIMESTAMP,
     lastModifiedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
+
+INSERT INTO oauth_client_details (client_id,
+                                  resource_ids,
+                                  client_secret,
+                                  scope,
+                                  authorized_grant_types,
+                                  web_server_redirect_uri,
+                                  authorities,
+                                  access_token_validity,
+                                  refresh_token_validity,
+                                  additional_information,
+                                  autoapprove)
+VALUES ('3dd0e341-d18b-42d8-b981-a701dc3f62c1',
+        NULL,
+        '$2a$10$rqwmirn0uwP.65QJ0j.1nOoWvvukCqv47mzaSktGhmlisrGXEqiQO',
+        'read,write',
+        'client_credentials,password,refresh_token',
+        NULL,
+        'ADMIN',
+        0,
+        0,
+        '{}',
+        NULL);

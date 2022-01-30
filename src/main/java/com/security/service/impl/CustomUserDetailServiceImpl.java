@@ -1,19 +1,15 @@
 package com.security.service.impl;
 
-import com.security.entity.Usuario;
 import com.security.repository.UserRepository;
+import com.security.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailService implements UserDetailsService {
-    
-    private static final String INVALID_USER = "Invalid user";
+public class CustomUserDetailServiceImpl implements CustomUserDetailService {
     
     private final UserRepository userRepository;
     

@@ -118,7 +118,7 @@ public class OAuthClientDetails implements ClientDetails {
             return false;
         }
         for (String auto : autoApproveScopes) {
-            if ("true".equals(auto) || scope.matches(auto)) {
+            if (Boolean.TRUE.equals(auto) || scope.matches(auto)) {
                 return true;
             }
         }
