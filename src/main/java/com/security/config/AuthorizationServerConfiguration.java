@@ -56,6 +56,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .accessTokenValiditySeconds(600)
                 .refreshTokenValiditySeconds(900)
                 .resourceIds(RESOURCE_ID);
+//                .redirectUris("http://localhost:8081/login");
     }
     
     @Bean
