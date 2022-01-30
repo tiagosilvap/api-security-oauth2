@@ -1,15 +1,19 @@
 package com.security.service.impl;
 
 import com.security.entity.OAuthClientDetails;
+import com.security.entity.enums.Role;
 import com.security.repository.OAuthClientRepository;
 import com.security.service.OAuthClientDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.ClientAlreadyExistsException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +27,19 @@ public class OAuthClientDetailServiceImpl implements OAuthClientDetailService {
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        return repository.findByClientId(clientId)
+        OAuthClientDetails clientDetails = repository.findByClientId(clientId)
                 .orElseThrow(() -> new NoSuchClientException(NO_CLIENT_FOUND_WITH_ID + clientId));
+        if(CollectionUtils.isEmpty(clientDetails.getAuthorities())
+                || !isAdmin(clientDetails.getAuthorities())) {
+            throw new InvalidTokenException(ACCESS_DENIED);
+        }
+        return clientDetails;
+    }
+    
+    private boolean isAdmin(List<GrantedAuthority> authorities) {
+        return authorities.stream()
+                .anyMatch(grantedAuthority ->
+                        Role.ADMIN.getAuthority().equals(grantedAuthority.getAuthority()));
     }
 
     @Override

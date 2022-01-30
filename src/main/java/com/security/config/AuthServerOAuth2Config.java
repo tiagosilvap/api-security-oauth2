@@ -1,6 +1,7 @@
 package com.security.config;
 
 import com.security.service.CustomUserDetailService;
+import com.security.service.OAuthClientDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +20,8 @@ import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConv
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
 
@@ -40,6 +41,8 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     private final DataSource dataSource;
     
     private final CustomUserDetailService userDetailService;
+    
+    private final OAuthClientDetailService clientDetailService;
     
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpointsConfigurer) throws Exception {
@@ -72,6 +75,7 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Bean
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setClientDetailsService(clientDetailService);
         tokenServices.setTokenStore(tokenStore());
         tokenServices.setSupportRefreshToken(true);
         return tokenServices;
@@ -79,7 +83,8 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     
     @Bean
     public TokenStore tokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
+        return new JdbcTokenStore(dataSource);
+        // return new JwtTokenStore(accessTokenConverter());
     }
     
     @Bean

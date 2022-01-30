@@ -22,7 +22,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasAuthority(Role.ADMIN)
+                .antMatchers("/admin/**").hasAuthority(Role.ADMIN.getAuthority())
                 .antMatchers("/product/**").authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
