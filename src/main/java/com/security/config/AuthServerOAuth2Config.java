@@ -75,7 +75,7 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Bean
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setClientDetailsService(clientDetailService);
+//        tokenServices.setClientDetailsService(clientDetailService);
         tokenServices.setTokenStore(tokenStore());
         tokenServices.setSupportRefreshToken(true);
         return tokenServices;
