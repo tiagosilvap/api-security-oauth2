@@ -1,6 +1,16 @@
 package com.security.entity.enums;
 
-public interface Role {
-    String ADMIN = "ADMIN";
-    String USER  = "USER";
+public enum Role {
+    ADMIN("ADMIN"),
+    USER("USER");
+    
+    private String authority;
+    
+    Role(String authority) {
+        this.authority = authority;
+    }
+    
+    public String getAuthority() {
+        return authority;
+    }
 }

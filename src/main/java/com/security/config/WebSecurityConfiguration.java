@@ -1,6 +1,6 @@
 package com.security.config;
 
-import com.security.service.impl.CustomUserDetailService;
+import com.security.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
